@@ -3,7 +3,6 @@
 #include <cstdlib>
 using namespace std;
 
-
 void clear(){
     #ifdef _WIN32
         system("cls");
@@ -11,7 +10,6 @@ void clear(){
         system("clear");
     #endif
 }
-
 
 struct User{
     string nama;
@@ -32,61 +30,77 @@ struct Mobil{
     Penyewa penyewa;
 };
 
-User users[100];
-Mobil mobil[100];
-
-int jumlahUser = 1;
-int jumlahMobil = 5;
-
-
-void dataAwal(){
-
-    users[0]={"Aril","119","admin"};
-
-    mobil[0]={"KT1234AA","Toyota Alphard",1500000,"Tersedia",{"",""}};
-    mobil[1]={"DA5678BB","BMW i8",2500000,"Tersedia",{"",""}};
-    mobil[2]={"KH8765CC","Mercedes Benz S-Class",2800000,"Tersedia",{"",""}};
-    mobil[3]={"KB4321DD","Range Rover Evoque",2000000,"Tersedia",{"",""}};
-    mobil[4]={"KU9999EE","Porsche Cayenne",3000000,"Tersedia",{"",""}};
-
+int hitungMobil(int n){
+    if(n==0) return 0;
+    return 1 + hitungMobil(n-1);
 }
 
-
-void lihatMobil(){
-
+void lihatMobil(Mobil mobil[], int jumlahMobil){
     clear();
-    
-    cout<< "\n=========================================================" << endl;
-    cout<< "=                      DAFTAR MOBIL                     ="  << endl;
-    cout<< "========================================================="  << endl;
+
+    cout<<"\n========================================================="<<endl;
+    cout<<"=                     DAFTAR MOBIL                     ="<<endl;
+    cout<<"========================================================="<<endl;
+
     cout<<left<<setw(12)<<"Plat"
         <<setw(25)<<"Nama Mobil"
         <<setw(12)<<"Harga"
         <<setw(15)<<"Status"<<endl;
-    cout<< "========================================================="  << endl;
+
+    cout<<"========================================================="<<endl;
 
     for(int i=0;i<jumlahMobil;i++){
-
         cout<<left<<setw(12)<<mobil[i].plat
             <<setw(25)<<mobil[i].nama
             <<setw(12)<<mobil[i].harga
             <<setw(15)<<mobil[i].status<<endl;
     }
 
-    cout<<"\nTekan Enter untuk kembali...";
+    cout<<"========================================================="<<endl;
+    cout<<"Total Mobil : "<<hitungMobil(jumlahMobil)<<endl;
+
+    cout<<"\nTekan Enter...";
     cin.ignore(1000,'\n');
     cin.get();
 }
 
+void lihatMobil(Mobil mobil[], int jumlahMobil, string status){
+    clear();
 
-void tambahMobil(){
+    cout<<"\n========================================================="<<endl;
+    cout<<"=           DAFTAR MOBIL ("<<status<<")              ="<<endl;
+    cout<<"========================================================="<<endl;
 
+    cout<<left<<setw(12)<<"Plat"
+        <<setw(25)<<"Nama Mobil"
+        <<setw(12)<<"Harga"
+        <<setw(15)<<"Status"<<endl;
+
+    cout<<"========================================================="<<endl;
+
+    for(int i=0;i<jumlahMobil;i++){
+        if(mobil[i].status==status){
+            cout<<left<<setw(12)<<mobil[i].plat
+                <<setw(25)<<mobil[i].nama
+                <<setw(12)<<mobil[i].harga
+                <<setw(15)<<mobil[i].status<<endl;
+        }
+    }
+
+    cout<<"========================================================="<<endl;
+
+    cout<<"\nTekan Enter...";
+    cin.ignore(1000,'\n');
+    cin.get();
+}
+
+void tambahMobil(Mobil mobil[], int &jumlahMobil){
     clear();
 
     cin.ignore(1000,'\n');
-    cout<< "\n===================================" << endl;
-    cout<< "=          Tambah Mobil           ="   << endl;
-    cout<< "==================================="   << endl;
+    cout<<"\n==================================="<<endl;
+    cout<<"=          Tambah Mobil           ="<<endl;
+    cout<<"==================================="<<endl;
 
     cout<<"Plat : ";
     getline(cin,mobil[jumlahMobil].plat);
@@ -98,7 +112,6 @@ void tambahMobil(){
     cin>>mobil[jumlahMobil].harga;
 
     mobil[jumlahMobil].status="Tersedia";
-
     jumlahMobil++;
 
     cout<<"Mobil berhasil ditambahkan\n";
@@ -108,20 +121,17 @@ void tambahMobil(){
     cin.get();
 }
 
-
-void updateMobil(){
-
+void updateMobil(Mobil mobil[], int jumlahMobil){
     clear();
 
     string plat;
 
-    lihatMobil();
+    lihatMobil(mobil, jumlahMobil);
 
     cout<<"\nMasukkan plat mobil : ";
     cin>>plat;
 
     for(int i=0;i<jumlahMobil;i++){
-
         if(mobil[i].plat==plat){
 
             cin.ignore(1000,'\n');
@@ -152,20 +162,17 @@ void updateMobil(){
     cin.get();
 }
 
-
-void hapusMobil(){
-
+void hapusMobil(Mobil mobil[], int &jumlahMobil){
     clear();
 
     string plat;
 
-    lihatMobil();
+    lihatMobil(mobil, jumlahMobil);
 
     cout<<"\nMasukkan plat mobil : ";
     cin>>plat;
 
     for(int i=0;i<jumlahMobil;i++){
-
         if(mobil[i].plat==plat){
 
             for(int j=i;j<jumlahMobil-1;j++){
@@ -191,19 +198,14 @@ void hapusMobil(){
     cin.get();
 }
 
-
-void sewaMobil(string nama,string nim){
-
+void sewaMobil(Mobil mobil[], int jumlahMobil, string nama,string nim){
     clear();
 
     string plat;
 
     for(int i=0;i<jumlahMobil;i++){
         if(mobil[i].penyewa.nama==nama){
-
             cout<<"Anda masih menyewa mobil "<<mobil[i].nama<<endl;
-            cout<<"Silakan kembalikan dulu sebelum menyewa lagi\n";
-
             cout<<"Tekan Enter...";
             cin.ignore(1000,'\n');
             cin.get();
@@ -211,34 +213,26 @@ void sewaMobil(string nama,string nim){
         }
     }
 
-    lihatMobil();
+    lihatMobil(mobil, jumlahMobil, "Tersedia");
 
     cout<<"\nMasukkan plat mobil : ";
     cin>>plat;
 
     for(int i=0;i<jumlahMobil;i++){
-
         if(mobil[i].plat==plat){
 
             if(mobil[i].status=="Tersedia"){
-
                 mobil[i].status="Disewa";
-
                 mobil[i].penyewa.nama=nama;
                 mobil[i].penyewa.nim=nim;
-
                 cout<<"Mobil berhasil disewa\n";
-
             }else{
-
                 cout<<"Mobil sedang disewa\n";
-
             }
 
             cout<<"Tekan Enter...";
             cin.ignore(1000,'\n');
             cin.get();
-
             return;
         }
     }
@@ -250,26 +244,19 @@ void sewaMobil(string nama,string nim){
     cin.get();
 }
 
-
-void kembalikanMobil(string nama){
-
+void kembalikanMobil(Mobil mobil[], int jumlahMobil, string nama){
     clear();
 
     for(int i=0;i<jumlahMobil;i++){
-
         if(mobil[i].penyewa.nama==nama){
-
             mobil[i].status="Tersedia";
-
             mobil[i].penyewa.nama="";
             mobil[i].penyewa.nim="";
-
             cout<<"Mobil berhasil dikembalikan\n";
 
             cout<<"Tekan Enter...";
             cin.ignore(1000,'\n');
             cin.get();
-
             return;
         }
     }
@@ -281,17 +268,14 @@ void kembalikanMobil(string nama){
     cin.get();
 }
 
-
-void menuAdmin(){
-
+void menuAdmin(Mobil mobil[], int &jumlahMobil){
     int pilih;
 
     do{
-
         clear();
-        cout<< "\n===================================" << endl;
-        cout<< "=             MENU ADMIN          ="   << endl;
-        cout<< "==================================="   << endl;
+        cout<<"\n==================================="<<endl;
+        cout<<"=             MENU ADMIN          ="<<endl;
+        cout<<"==================================="<<endl;
 
         cout<<"1. Lihat Mobil\n";
         cout<<"2. Tambah Mobil\n";
@@ -302,25 +286,22 @@ void menuAdmin(){
         cout<<"Pilih : ";
         cin>>pilih;
 
-        if(pilih==1) lihatMobil();
-        else if(pilih==2) tambahMobil();
-        else if(pilih==3) updateMobil();
-        else if(pilih==4) hapusMobil();
+        if(pilih==1) lihatMobil(mobil, jumlahMobil);
+        else if(pilih==2) tambahMobil(mobil, jumlahMobil);
+        else if(pilih==3) updateMobil(mobil, jumlahMobil);
+        else if(pilih==4) hapusMobil(mobil, jumlahMobil);
 
     }while(pilih!=5);
 }
 
-
-void menuUser(string nama,string nim){
-
+void menuUser(Mobil mobil[], int jumlahMobil, string nama,string nim){
     int pilih;
 
     do{
-
         clear();
-        cout<< "\n===================================" << endl;
-        cout<< "=             MENU USER           ="   << endl;
-        cout<< "==================================="   << endl;
+        cout<<"\n==================================="<<endl;
+        cout<<"=             MENU USER           ="<<endl;
+        cout<<"==================================="<<endl;
 
         cout<<"1. Lihat Mobil\n";
         cout<<"2. Sewa Mobil\n";
@@ -330,22 +311,20 @@ void menuUser(string nama,string nim){
         cout<<"Pilih : ";
         cin>>pilih;
 
-        if(pilih==1) lihatMobil();
-        else if(pilih==2) sewaMobil(nama,nim);
-        else if(pilih==3) kembalikanMobil(nama);
+        if(pilih==1) lihatMobil(mobil, jumlahMobil, "Tersedia");
+        else if(pilih==2) sewaMobil(mobil, jumlahMobil, nama,nim);
+        else if(pilih==3) kembalikanMobil(mobil, jumlahMobil, nama);
 
     }while(pilih!=4);
 }
 
-
-void registerUser(){
-
+void registerUser(User users[], int &jumlahUser){
     clear();
 
     cin.ignore(1000,'\n');
-    cout<< "\n===================================" << endl;
-    cout<< "=             REGISTER            ="   << endl;
-    cout<< "==================================="   << endl;
+    cout<<"\n==================================="<<endl;
+    cout<<"=             REGISTER            ="<<endl;
+    cout<<"==================================="<<endl;
 
     cout<<"Nama : ";
     getline(cin, users[jumlahUser].nama);
@@ -354,7 +333,6 @@ void registerUser(){
     getline(cin, users[jumlahUser].nim);
 
     users[jumlahUser].role="user";
-
     jumlahUser++;
 
     cout<<"Register berhasil!\n";
@@ -363,19 +341,15 @@ void registerUser(){
     cin.get();
 }
 
-
-void login(){
-
+void login(User users[], int jumlahUser, Mobil mobil[], int &jumlahMobil){
     string nama,nim;
-
     int percobaan=0;
 
     while(percobaan<3){
-
         clear();
-        cout<< "\n===================================" << endl;
-        cout<< "=             LOGIN               ="   << endl;
-        cout<< "==================================="   << endl;
+        cout<<"\n==================================="<<endl;
+        cout<<"=             LOGIN               ="<<endl;
+        cout<<"==================================="<<endl;
 
         cin.ignore(1000,'\n');
 
@@ -386,44 +360,49 @@ void login(){
         getline(cin,nim);
 
         for(int i=0;i<jumlahUser;i++){
-
             if(users[i].nama==nama && users[i].nim==nim){
-
                 if(users[i].role=="admin")
-                    menuAdmin();
+                    menuAdmin(mobil, jumlahMobil);
                 else
-                    menuUser(nama,nim);
-
+                    menuUser(mobil, jumlahMobil, nama,nim);
                 return;
             }
         }
 
         percobaan++;
-
-        cout<<"Login gagal! Sisa percobaan "<<3-percobaan<<endl;
+        cout<<"Login gagal! Sisa "<<3-percobaan<<endl;
 
         cout<<"Tekan Enter...";
         cin.get();
     }
 
-    cout<<"Login gagal 3 kali. Program berhenti\n";
-
+    cout<<"Login gagal 3 kali\n";
     exit(0);
 }
 
-
 int main(){
+
+    User users[100];
+    Mobil mobil[100];
+
+    int jumlahUser = 1;
+    int jumlahMobil = 5;
+
+    users[0]={"Aril","119","admin"};
+
+    mobil[0]={"KT1234AA","Toyota Alphard",1500000,"Tersedia",{"",""}};
+    mobil[1]={"DA5678BB","BMW i8",2500000,"Tersedia",{"",""}};
+    mobil[2]={"KH8765CC","Mercedes Benz S-Class",2800000,"Tersedia",{"",""}};
+    mobil[3]={"KB4321DD","Range Rover Evoque",2000000,"Tersedia",{"",""}};
+    mobil[4]={"KU9999EE","Porsche Cayenne",3000000,"Tersedia",{"",""}};
 
     int menu;
 
-    dataAwal();
-
     do{
-
         clear();
-        cout<< "\n===================================" << endl;
-        cout<< "=       SISTEM RENTAL MOBIL       = "  << endl;
-        cout<< "==================================="   << endl;
+        cout<<"\n==================================="<<endl;
+        cout<<"=       SISTEM RENTAL MOBIL       ="<<endl;
+        cout<<"==================================="<<endl;
 
         cout<<"1. Login\n";
         cout<<"2. Register\n";
@@ -432,10 +411,10 @@ int main(){
         cout<<"Pilih : ";
         cin>>menu;
 
-        if(menu==1) login();
-        else if(menu==2) registerUser();
+        if(menu==1) login(users, jumlahUser, mobil, jumlahMobil);
+        else if(menu==2) registerUser(users, jumlahUser);
 
     }while(menu!=3);
 
-    cout<<"Terima kasih telah menggunakan program sayaaaaaaaa!!\n";
-} 
+    cout<<"Terima kasih\n";
+}
