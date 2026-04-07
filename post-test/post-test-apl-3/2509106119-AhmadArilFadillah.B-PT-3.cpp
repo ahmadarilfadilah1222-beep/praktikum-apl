@@ -416,5 +416,5 @@ int main(){
 
     }while(menu!=3);
 
-    cout<<"Terima kasih\n";
+    cout<<"Terima kasih sudah menggunakan program saya !!\n";
 }
